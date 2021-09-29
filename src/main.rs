@@ -1,42 +1,71 @@
 mod dictionary;
 mod locale;
+mod filesystem;
+mod mimeparsers;
 
-use std::fs::{create_dir, read_dir, rename};
-use dictionary::{
-    DirType::*,
-    get_dir
+use std::fs::read_dir;
+use std::thread::spawn;
+
+use crate::{
+    dictionary::DirType::*,
+    filesystem::move_file,
+    mimeparsers::*
 };
 
-fn move_file(from: std::path::PathBuf, to: crate::dictionary::DirType) {
-    let from = from.to_str().expect("Couldn't convert path");
-    let mut to = get_dir(to);
+/*
+ * Mime type lists:
+ * https://www.iana.org/assignments/media-types/media-types.xhtml
+ *
+ * https://stackoverflow.com/questions/4212861/what-is-a-correct-mime-type-for-docx-pptx-etc
+ */
 
-    let _ = create_dir(to.clone());
+const USE_THREADS: bool = true;
 
-    to.push_str(&from[1..]);
+fn handle_file(entry: Result<std::fs::DirEntry, std::io::Error>) {
+    if let Ok(entry) = entry {
+        let path = entry.path();
+        if let Ok(Some(kind)) = infer::get_from_path(&path) {
+            let kind = kind.to_string();
 
-    println!("Moving {} to {}", from, to);
+            print!(
+                "\nPath:\t{}\nType:\t{}\n\n",
+                path.to_str().unwrap_or("Error"),
+                kind
+            );
 
-    rename(from, to).expect("Error moving file")
+            let kind_collection = kind.split("/").collect::<Vec<&str>>();
+            let kind = kind_collection[0];
+
+            move_file(
+                path,
+                match kind {
+                    "image" => Images,
+                    "video" => Videos,
+                    "application" => parse_application(kind_collection[1]),
+                    "text" => parse_text(kind_collection[1]),
+                    _ => Other,
+                },
+            );
+        }
+    }
 }
 
 fn main() {
-    for entry in read_dir(".").expect("Couldn't read contents of dir") {
-        if let Ok(entry) = entry {
-            let path = entry.path();
-            if let Ok(Some(kind)) = infer::get_from_path(&path) {
-                let kind = kind.to_string();
-                let kind = kind.split("/").collect::<Vec<&str>>()[0];
+    let dir = read_dir(".").expect("Couldn't read contents of dir");
+    if USE_THREADS {
+        let dir: Vec<_> = dir.collect();
 
-                move_file(
-                    path,
-                    match kind {
-                        "image" => Images,
-                        "video" => Videos,
-                        _ => Other,
-                    }
-                )
-            }
+        let mut join_handles = Vec::with_capacity(dir.len());
+        for entry in dir {
+            join_handles.push(spawn(move || handle_file(entry)));
+        }
+
+        for handle in join_handles {
+            handle.join().expect("Thread panicked!");
+        }
+    } else {
+        for entry in dir {
+            handle_file(entry);
         }
     }
 }

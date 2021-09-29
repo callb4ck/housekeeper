@@ -1,10 +1,8 @@
-#[allow(dead_code)]
 pub enum Locale {
     En,
     It,
 }
 
-#[allow(dead_code)]
 impl Locale {
     /// Get locale from LANG environment variable.
     pub fn from_env() -> Locale {
