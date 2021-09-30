@@ -1,5 +1,6 @@
 use crate::language::dictionary::{DirType, DirType::*};
 
+/// Check if string starts with any of the &str
 macro_rules! check_start {
     ($to_check:expr, $($start:literal),*) => {
         $(
@@ -8,6 +9,7 @@ macro_rules! check_start {
     }
 }
 
+/// Parse application/* mime-types
 pub fn parse_application(mime: &str) -> DirType {
     if check_start!(
         mime,
@@ -33,11 +35,14 @@ pub fn parse_application(mime: &str) -> DirType {
 
             "vnd.debian.binary-package" | "x-rpm" => Packages,
 
+            "x-executable" => Binaries,
+
             _ => Other,
         }
     }
 }
 
+/// Parse text/* mime-types
 pub fn parse_text(mime: &str) -> DirType {
     match mime {
         "x-shellscript" => ShellScripts,

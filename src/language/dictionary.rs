@@ -12,6 +12,7 @@ pub enum DirType {
     Spreadsheets,
     ShellScripts,
     SourceFiles,
+    Binaries,
     Other,
 }
 
@@ -26,6 +27,7 @@ pub fn get_dir(generic_dir: DirType) -> String {
             Spreadsheets => "Fogli di calcolo",
             ShellScripts => "Script shell",
             SourceFiles => "Sorgenti",
+            Binaries => "Binari",
             Other => "Altro",
         },
 
@@ -38,6 +40,7 @@ pub fn get_dir(generic_dir: DirType) -> String {
             Spreadsheets => "Spreadsheets",
             ShellScripts => "Shell scripts",
             SourceFiles => "Soule files",
+            Binaries => "Binaries",
             Other => "Other",
         },
     }

@@ -18,7 +18,7 @@ fn main() {
     let opts = arg_parser::parse();
 
     if let Some(path) = opts.path {
-        set_current_dir(path).expect("Error while opening path");
+        set_current_dir(path).expect("Error while opening path"); // Not really elegant, but does the job
     }
 
     let dir = read_dir(".").expect("Couldn't read contents of dir");

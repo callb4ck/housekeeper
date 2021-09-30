@@ -7,7 +7,7 @@ pub fn move_file(from: std::path::PathBuf, to: DirType) {
 
     let _ = create_dir(to.clone());
 
-    to.push_str(&from[1..]);
+    to.push_str(&from[1..]); // Forgive me
 
     rename(from, to).expect("Error moving file")
 }
