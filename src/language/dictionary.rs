@@ -1,7 +1,7 @@
-use crate::locale::Locale;
-use crate::locale::Locale::*;
-
-use crate::dictionary::DirType::*; // Forgive me, I'm lazy
+use crate::language::{
+    dictionary::DirType::*, // Forgive me, I'm lazy
+    locales::{Locale, Locale::*},
+};
 
 pub enum DirType {
     Videos,
@@ -11,6 +11,7 @@ pub enum DirType {
     Presentations,
     Spreadsheets,
     ShellScripts,
+    SourceFiles,
     Other,
 }
 
@@ -24,6 +25,7 @@ pub fn get_dir(generic_dir: DirType) -> String {
             Presentations => "Presentazioni",
             Spreadsheets => "Fogli di calcolo",
             ShellScripts => "Script shell",
+            SourceFiles => "Sorgenti",
             Other => "Altro",
         },
 
@@ -35,6 +37,7 @@ pub fn get_dir(generic_dir: DirType) -> String {
             Presentations => "Presentations",
             Spreadsheets => "Spreadsheets",
             ShellScripts => "Shell scripts",
+            SourceFiles => "Soule files",
             Other => "Other",
         },
     }

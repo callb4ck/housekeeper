@@ -1,4 +1,4 @@
-use crate::dictionary::{DirType, DirType::*};
+use crate::language::dictionary::{DirType, DirType::*};
 
 macro_rules! check_start {
     ($to_check:expr, $($start:literal),*) => {
@@ -41,6 +41,7 @@ pub fn parse_application(mime: &str) -> DirType {
 pub fn parse_text(mime: &str) -> DirType {
     match mime {
         "x-shellscript" => ShellScripts,
+        "x-c" => SourceFiles,
 
         _ => Other,
     }
