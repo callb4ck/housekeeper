@@ -6,6 +6,6 @@ build() {
 }
 
 build
-echo Requiring root permissions to move executable to /usr/bin/
+printf "\n\nRequiring root permissions to move executable to /usr/bin/\n"
 sudo mv ./target/release/housekeeper /usr/bin/housekeeper && echo Done
 
