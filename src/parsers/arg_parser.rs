@@ -3,6 +3,7 @@ use std::{env::args, process::exit};
 #[derive(Default)]
 pub struct ArgOptions {
     pub single_thread: bool,
+    pub dry_run: bool,
     pub path: Option<String>,
 }
 
@@ -10,6 +11,7 @@ fn help() {
     println!(
         "Use: housekeeper [OPTS] [PATH]
     -h,  --help:          Show this help message
+    -d,  --dry-run:       Simulates an execution
     -st, --single-thread: Only use one thread
 
 --- NOTE ---
@@ -29,8 +31,9 @@ pub fn parse() -> ArgOptions {
 
     for arg in arg_list {
         match arg.to_lowercase().as_str() {
-            "-st" | "--single-thread" => opts.single_thread = true,
             "-h" | "--help" => help(),
+            "-d" | "--dry-run" => opts.dry_run = true,
+            "-st" | "--single-thread" => opts.single_thread = true,
             _ => {
                 if !arg.starts_with("-") {
                     path.push_str(arg.as_str());

@@ -23,15 +23,17 @@ fn main() {
 
     let dir = read_dir(".").expect("Couldn't read contents of dir");
     if opts.single_thread {
+        let dry = opts.dry_run;
         for entry in dir {
-            handle_file(entry);
+            handle_file(entry, dry);
         }
     } else {
         let dir: Vec<_> = dir.collect();
 
         let mut join_handles = Vec::with_capacity(dir.len());
+        let dry = opts.dry_run;
         for entry in dir {
-            join_handles.push(spawn(move || handle_file(entry)));
+            join_handles.push(spawn(move || handle_file(entry, dry)));
         }
 
         for handle in join_handles {
