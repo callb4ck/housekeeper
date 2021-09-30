@@ -1,6 +1,6 @@
 [package]
 name = "housekeeper"
-version = "0.2.2"
+version = "0.3.0"
 edition = "2018"
 license = "GPL-2.0"
 
@@ -8,3 +8,4 @@ license = "GPL-2.0"
 
 [dependencies]
 infer = "0.5.0"
+src = "0.0.6"

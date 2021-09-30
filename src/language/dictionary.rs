@@ -3,6 +3,7 @@ use crate::language::{
     locales::{Locale, Locale::*},
 };
 
+#[derive(Debug)]
 pub enum DirType {
     Videos,
     Images,
