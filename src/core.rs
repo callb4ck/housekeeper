@@ -4,14 +4,14 @@ use crate::{
     parsers::type_parsers::*,
 };
 
-use std::path::PathBuf;
+use std::path::Path;
 
 /// Let the infer crate handle the type
-fn handle_known(kind: infer::Type, path: &PathBuf) -> Option<DirType> {
+fn handle_known(kind: infer::Type, path: &Path) -> Option<DirType> {
     let kind = kind.to_string();
 
 
-    let kind_collection = kind.split("/").collect::<Vec<&str>>();
+    let kind_collection = kind.split('/').collect::<Vec<&str>>();
 
     let return_kind = match kind_collection[0] {
         "image" => Images,
@@ -30,7 +30,7 @@ fn handle_known(kind: infer::Type, path: &PathBuf) -> Option<DirType> {
     Some(return_kind)
 }
 
-fn handle_unknown(path: &PathBuf) -> Option<DirType> {
+fn handle_unknown(path: &Path) -> Option<DirType> {
     let kind = parse_unkown(path)?;
 
     print!(

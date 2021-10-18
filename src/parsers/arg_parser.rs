@@ -11,7 +11,7 @@ fn help() {
     println!(
         "Use: housekeeper [OPTS] [PATH]
     -h,  --help:          Show this help message
-    -d,  --dry-run:       Simulates an execution
+    -d,  --dry-run:       Simulate an execution
     -st, --single-thread: Only use one thread
 
 --- NOTE ---
@@ -35,7 +35,7 @@ pub fn parse() -> ArgOptions {
             "-d" | "--dry-run" => opts.dry_run = true,
             "-st" | "--single-thread" => opts.single_thread = true,
             _ => {
-                if !arg.starts_with("-") {
+                if !arg.starts_with('-') {
                     path.push_str(arg.as_str());
                     path.push(' ');
                 }
@@ -43,7 +43,7 @@ pub fn parse() -> ArgOptions {
         }
     }
 
-    if path != "" {
+    if !path.is_empty() {
         opts.path = Some(path.trim_end().to_string());
     }
 

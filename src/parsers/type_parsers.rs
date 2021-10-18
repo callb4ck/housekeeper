@@ -1,6 +1,6 @@
 use crate::language::dictionary::{DirType, DirType::*};
 
-use std::path::PathBuf;
+use std::path::Path;
 
 /// Checks if string starts with any of the `&str`s
 macro_rules! check_start {
@@ -70,19 +70,22 @@ pub fn parse_application(mime: &str) -> DirType {
 /// Parse text/* mime-types
 pub fn parse_text(mime: &str) -> Option<DirType> {
     match mime {
-        "x-shellscript" => Some(ShellScripts),
+        "x-shellscript" => Some(Scripts),
         "x-c" => Some(SourceFiles),
         _ => None,
     }
 }
 
 /// Parse types that are not recognized by the infer crate
-pub fn parse_unkown(path: &PathBuf) -> Option<DirType> {
+pub fn parse_unkown(path: &Path) -> Option<DirType> {
     let path = path.to_str().expect("Invalid path");
 
     check_end!(path,
         ".md", ".tex", ".ltx" => Documents
-        ".rs", ".go", ".java", ".c", ".cpp", ".cxx", ".cs", ".h", ".rb", ".py" => SourceFiles
+        ".rs", ".go", ".java", ".c", ".cpp", ".cxx", ".cs", ".h", ".rb",
+        ".php", ".php3", ".php4", ".php5", ".php6", ".php7", ".php8" => SourceFiles
         ".pyc", ".class" => Binaries
+        ".py" => Scripts
     )
 }
+
